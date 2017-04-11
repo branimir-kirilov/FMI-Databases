@@ -1,0 +1,138 @@
+--15.03.17-Lab4--
+---Movies Database Tasks---
+USE movies
+GO
+
+--Task 01--
+SELECT MOVIE.TITLE,  MOVIEEXEC.NAME
+FROM MOVIE
+INNER JOIN MOVIEEXEC 
+ON PRODUCERC#=CERT#
+WHERE CERT# IN 
+	(SELECT PRODUCERC#
+	 FROM MOVIE
+	 WHERE TITLE='STAR WARS')
+GO
+
+--Task 02--
+SELECT
+	DISTINCT s.NAME
+FROM MOVIE m 
+INNER JOIN MOVIEEXEC s
+ON m.PRODUCERC# = s.CERT#
+INNER JOIN STARSIN i
+ON m.TITLE = i.MOVIETITLE
+WHERE i.STARNAME = 'Harrison Ford'
+GO
+
+--Task 03--
+SELECT 
+	DISTINCT m.STUDIONAME,i.STARNAME
+FROM MOVIE m 
+INNER JOIN MOVIEEXEC s
+ON m.PRODUCERC# = s.CERT#
+INNER JOIN STARSIN i
+ON m.TITLE = i.MOVIETITLE
+ORDER BY m.STUDIONAME ASC
+GO
+
+--Task 04--
+SELECT
+	i.STARNAME AS Starname,
+	s.NETWORTH AS Networth,
+	m.TITLE AS MovieTitle
+FROM MOVIE m 
+INNER JOIN MOVIEEXEC s
+ON m.PRODUCERC# = s.CERT#
+INNER JOIN STARSIN i
+ON m.TITLE = i.MOVIETITLE
+WHERE s.NETWORTH >= ALL(
+	SELECT NETWORTH
+	FROM MOVIEEXEC)
+GO
+
+--Task 05--
+SELECT
+	ms.NAME AS StarName,
+	s.MOVIETITLE AS MovieTitle
+FROM STARSIN s
+RIGHT JOIN MOVIESTAR ms
+ON s.STARNAME = ms.NAME
+WHERE s.STARNAME IS NULL
+GO
+
+---PC Database Tasks---
+USE pc
+GO
+
+--Task 01--
+SELECT 
+	p.maker AS Maker,
+	p.model AS Model,
+	p.type AS Type
+FROM  product p
+LEFT JOIN laptop l
+ON p.model = l.model
+LEFT JOIN pc pc
+ON p.model = pc.model
+LEFT JOIN printer pr
+ON p.model = pr.model
+WHERE l.model IS NULL
+AND pc.model IS NULL
+AND pr.model IS NULL
+GO
+
+--Task 02--
+SELECT p.maker
+FROM product p
+WHERE p.type = 'Laptop'
+INTERSECT
+SELECT p.maker
+FROM product p
+WHERE p.type = 'Printer'
+GO
+
+ 
+--Task 03--
+SELECT 
+	DISTINCT l.hd
+FROM laptop l
+JOIN laptop l2
+ON l.hd= l2.hd
+AND l.code > l2.code
+GO 
+
+--Task 04--
+SELECT pc.model
+FROM pc pc
+EXCEPT
+SELECT pr.model
+FROM product pr
+WHERE pr.type = 'PC'
+GO
+
+---Ships Database---
+USE ships
+GO
+
+--Task 01--
+SELECT * 
+FROM SHIPS s
+JOIN CLASSES c
+ON s.CLASS = c.CLASS
+GO
+
+--Task 02--
+SELECT * 
+FROM SHIPS s
+RIGHT JOIN CLASSES c
+ON s.CLASS = c.CLASS
+ORDER BY s.NAME ASC
+GO
+
+--Task 03--
+
+
+
+SELECT * 
+FROM CLASSES
